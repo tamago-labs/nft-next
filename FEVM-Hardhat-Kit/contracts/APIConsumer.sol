@@ -6,12 +6,10 @@ import {MarketAPI} from "./filecoinMockAPIs/MarketAPI.sol";
 import {CommonTypes} from "./filecoinMockAPIs/types/CommonTypes.sol";
 import {MarketTypes} from "./filecoinMockAPIs/types/MarketTypes.sol";
 
-
 contract APIConsumer {
-
     address public marketApiAddress;
 
-     constructor(address _marketApiAddress) { 
+    constructor(address _marketApiAddress) {
         marketApiAddress = _marketApiAddress;
     }
 
@@ -24,8 +22,7 @@ contract APIConsumer {
     {
         MarketAPI marketApiInstance = MarketAPI(marketApiAddress);
 
-        MarketTypes.GetBalanceReturn memory response = marketApiInstance
-            .get_balance(_clientId);
+        MarketTypes.GetBalanceReturn memory response = marketApiInstance.get_balance(_clientId);
         return response;
     }
 
@@ -41,10 +38,8 @@ contract APIConsumer {
         MarketTypes.GetDealDataCommitmentParams memory params = MarketTypes
             .GetDealDataCommitmentParams(_dealId);
 
-        MarketTypes.GetDealDataCommitmentReturn
-            memory response = marketApiInstance.get_deal_data_commitment(
-                params
-            );
+        MarketTypes.GetDealDataCommitmentReturn memory response = marketApiInstance
+            .get_deal_data_commitment(params);
         return response;
     }
 
@@ -53,11 +48,9 @@ contract APIConsumer {
     function getDealClient(uint64 _dealId) public view returns (string memory) {
         MarketAPI marketApiInstance = MarketAPI(marketApiAddress);
 
-        MarketTypes.GetDealClientParams memory params = MarketTypes
-            .GetDealClientParams(_dealId);
+        MarketTypes.GetDealClientParams memory params = MarketTypes.GetDealClientParams(_dealId);
 
-        MarketTypes.GetDealClientReturn memory response = marketApiInstance
-            .get_deal_client(params);
+        MarketTypes.GetDealClientReturn memory response = marketApiInstance.get_deal_client(params);
         return response.client;
     }
 
@@ -70,11 +63,13 @@ contract APIConsumer {
     {
         MarketAPI marketApiInstance = MarketAPI(marketApiAddress);
 
-        MarketTypes.GetDealProviderParams memory params = MarketTypes
-            .GetDealProviderParams(_dealId);
+        MarketTypes.GetDealProviderParams memory params = MarketTypes.GetDealProviderParams(
+            _dealId
+        );
 
-        MarketTypes.GetDealProviderReturn memory response = marketApiInstance
-            .get_deal_provider(params);
+        MarketTypes.GetDealProviderReturn memory response = marketApiInstance.get_deal_provider(
+            params
+        );
         return response;
     }
 
@@ -87,11 +82,9 @@ contract APIConsumer {
     {
         MarketAPI marketApiInstance = MarketAPI(marketApiAddress);
 
-        MarketTypes.GetDealLabelParams memory params = MarketTypes
-            .GetDealLabelParams(_dealId);
+        MarketTypes.GetDealLabelParams memory params = MarketTypes.GetDealLabelParams(_dealId);
 
-        MarketTypes.GetDealLabelReturn memory response = marketApiInstance
-            .get_deal_label(params);
+        MarketTypes.GetDealLabelReturn memory response = marketApiInstance.get_deal_label(params);
         return response;
     }
 
@@ -104,11 +97,9 @@ contract APIConsumer {
     {
         MarketAPI marketApiInstance = MarketAPI(marketApiAddress);
 
-        MarketTypes.GetDealTermParams memory params = MarketTypes
-            .GetDealTermParams(_dealId);
+        MarketTypes.GetDealTermParams memory params = MarketTypes.GetDealTermParams(_dealId);
 
-        MarketTypes.GetDealTermReturn memory response = marketApiInstance
-            .get_deal_term(params);
+        MarketTypes.GetDealTermReturn memory response = marketApiInstance.get_deal_term(params);
         return response;
     }
 
@@ -121,8 +112,9 @@ contract APIConsumer {
     {
         MarketAPI marketApiInstance = MarketAPI(marketApiAddress);
 
-        MarketTypes.GetDealEpochPriceParams memory params = MarketTypes
-            .GetDealEpochPriceParams(_dealId);
+        MarketTypes.GetDealEpochPriceParams memory params = MarketTypes.GetDealEpochPriceParams(
+            _dealId
+        );
 
         MarketTypes.GetDealEpochPriceReturn memory response = marketApiInstance
             .get_deal_total_price(params);
@@ -141,10 +133,8 @@ contract APIConsumer {
         MarketTypes.GetDealClientCollateralParams memory params = MarketTypes
             .GetDealClientCollateralParams(_dealId);
 
-        MarketTypes.GetDealClientCollateralReturn
-            memory response = marketApiInstance.get_deal_client_collateral(
-                params
-            );
+        MarketTypes.GetDealClientCollateralReturn memory response = marketApiInstance
+            .get_deal_client_collateral(params);
         return response;
     }
 
@@ -160,10 +150,8 @@ contract APIConsumer {
         MarketTypes.GetDealProviderCollateralParams memory params = MarketTypes
             .GetDealProviderCollateralParams(_dealId);
 
-        MarketTypes.GetDealProviderCollateralReturn
-            memory response = marketApiInstance.get_deal_provider_collateral(
-                params
-            );
+        MarketTypes.GetDealProviderCollateralReturn memory response = marketApiInstance
+            .get_deal_provider_collateral(params);
         return response;
     }
 
@@ -176,11 +164,13 @@ contract APIConsumer {
     {
         MarketAPI marketApiInstance = MarketAPI(marketApiAddress);
 
-        MarketTypes.GetDealVerifiedParams memory params = MarketTypes
-            .GetDealVerifiedParams(_dealId);
+        MarketTypes.GetDealVerifiedParams memory params = MarketTypes.GetDealVerifiedParams(
+            _dealId
+        );
 
-        MarketTypes.GetDealVerifiedReturn memory response = marketApiInstance
-            .get_deal_verified(params);
+        MarketTypes.GetDealVerifiedReturn memory response = marketApiInstance.get_deal_verified(
+            params
+        );
         return response;
     }
 
@@ -193,12 +183,13 @@ contract APIConsumer {
     {
         MarketAPI marketApiInstance = MarketAPI(marketApiAddress);
 
-        MarketTypes.GetDealActivationParams memory params = MarketTypes
-            .GetDealActivationParams(_dealId);
+        MarketTypes.GetDealActivationParams memory params = MarketTypes.GetDealActivationParams(
+            _dealId
+        );
 
-        MarketTypes.GetDealActivationReturn memory response = marketApiInstance
-            .get_deal_activation(params);
+        MarketTypes.GetDealActivationReturn memory response = marketApiInstance.get_deal_activation(
+            params
+        );
         return response;
     }
-
 }

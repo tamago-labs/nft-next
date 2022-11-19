@@ -191,7 +191,7 @@ contract MarketAPI {
         deal_67.verified = false;
         deal_67.client = "t01109";
         deal_67.provider = "t01113";
-        deal_67.label = "mAXCg5AIg8YBXbFjtdBy1iZjpDYAwRSt0elGLF5GvTqulEii1VcM";
+        deal_67.label = "mAXCg5AIg8YBXbFjtdBy1iZjpDYAwRSt0elGLF5GvTqulEii1VcM"; // <-- Replace content's CID here
         deal_67.start = 25245;
         deal_67.end = 545150;
         deal_67.price_per_epoch = 1100000000000;
