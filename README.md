@@ -2,7 +2,7 @@
 
 ## Live URL
 
-https://nft-next.tamagonft.xyz
+[https://nft-next.tamagonft.xyz](https://next-nft.tamagonft.xyz/)
 
 ## Deployment
 
