@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: MIT
 
 pragma solidity 0.8.17;
 
@@ -11,14 +10,8 @@ import {APIConsumer} from "./APIConsumer.sol";
 /**
  * @title NextNFT DAO : A DataDAO for self-sovereign content
  */
-
 contract NextNFTDAO is Soulbound1155, Soulbound1155URIStorage, APIConsumer {
-    enum Role {
-        UNAUTHORIZED,
-        MEMBER,
-        ADMIN
-    }
-
+    
     struct Order {
         uint256 sellAmount;
         uint256 previousSellAmount;
@@ -26,9 +19,7 @@ contract NextNFTDAO is Soulbound1155, Soulbound1155URIStorage, APIConsumer {
         address previousHolder;
         uint256 traded;
     }
-
-    // ACL
-    mapping(address => Role) private permissions;
+ 
     // maps to the owner of each token ID
     mapping(uint256 => address) public tokenOwners;
     uint256 public tokenOwnerCount;
@@ -40,12 +31,6 @@ contract NextNFTDAO is Soulbound1155, Soulbound1155URIStorage, APIConsumer {
     mapping(uint256 => Order) public orders;
     // token to be minted during the creation
     uint8 public constant INITIAL_AMOUNT = 1;
-    // fee
-    uint256 private constant FEE = 2000;
-
-    constructor(address _marketApiAddress) APIConsumer(_marketApiAddress) {
-        permissions[msg.sender] = Role.ADMIN;
-    }
 
     /// @notice create a new token
     function create(
@@ -77,7 +62,10 @@ contract NextNFTDAO is Soulbound1155, Soulbound1155URIStorage, APIConsumer {
 
     /// @notice set current price if you're the last holder
     function setCurrentPrice(uint256 _tokenId, uint256 _sellAmount) public {
-        require(orders[_tokenId].currentHolder == msg.sender, "You're not authorized");
+        require(
+            orders[_tokenId].currentHolder == msg.sender,
+            "You're not authorized"
+        );
 
         orders[_tokenId].previousSellAmount = orders[_tokenId].sellAmount;
         orders[_tokenId].sellAmount = _sellAmount;
@@ -89,16 +77,7 @@ contract NextNFTDAO is Soulbound1155, Soulbound1155URIStorage, APIConsumer {
         require(orders[_tokenId].sellAmount == msg.value, "Invalid value");
 
         // taking
-        uint256 amount = msg.value;
-
-        // FIXME : Uncomment this
-        // if (FEE != 0) {
-        //     uint256 fee = (amount * (FEE)) / (10000);
-        //     // Locks the fee in the contract for now
-        //     // (bool successDev, ) = devAddress.call{value: fee}("");
-        //     // require(successDev, "Failed to send Ether to dev");
-        //     amount -= fee;
-        // }
+        uint256 amount = msg.value; 
 
         (bool sent, ) = orders[_tokenId].currentHolder.call{value: amount}("");
 
@@ -144,25 +123,12 @@ contract NextNFTDAO is Soulbound1155, Soulbound1155URIStorage, APIConsumer {
         return MerkleProof.verify(_proof, roots[_tokenId], leaf);
     }
 
-    // give a specific permission to the given address
-    function grant(address _address, Role _role) external onlyAdmin {
-        require(_address != _msgSender(), "You cannot grant yourself");
-        permissions[_address] = _role;
-    }
-
-    // remove any permission binded to the given address
-    function revoke(address _address) external onlyAdmin {
-        require(_address != _msgSender(), "You cannot revoke yourself");
-        permissions[_address] = Role.UNAUTHORIZED;
-    }
-
-    modifier onlyAdmin() {
-        require(permissions[msg.sender] == Role.ADMIN, "Caller is not the admin");
-        _;
-    }
-
     // hard-coded deal ID
-    function _settleContent(string memory _contentCID) internal view returns (uint64) {
+    function _settleContent(string memory _contentCID)
+        internal
+        view
+        returns (uint64)
+    {
         return 67;
     }
 
@@ -175,32 +141,11 @@ contract NextNFTDAO is Soulbound1155, Soulbound1155URIStorage, APIConsumer {
         if (orders[_tokenId].sellAmount != 0) {
             orders[_tokenId].previousSellAmount = orders[_tokenId].sellAmount;
         }
-        orders[_tokenId].sellAmount = _sellAmount;
+        orders[_tokenId].sellAmount = _sellAmount; 
         if (orders[_tokenId].currentHolder != address(0)) {
             orders[_tokenId].previousHolder = orders[_tokenId].currentHolder;
         }
         orders[_tokenId].currentHolder = _currentHolder;
     }
-
-    /// @notice the user can only transfer the token in/out from the contract
-    function _beforeTokenTransfer(
-        address operator,
-        address from,
-        address to,
-        uint256[] memory ids,
-        uint256[] memory amounts,
-        bytes memory data
-    ) internal virtual override {
-        super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
-
-        for (uint256 i = 0; i < ids.length; i++) {
-            if (to != address(this) && from != address(0) && to != address(0)) {
-                require(false, "Not allow to be transfered");
-            }
-        }
-    }
-
-    receive() external payable {}
-
-    fallback() external payable {}
+ 
 }

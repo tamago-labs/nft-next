@@ -9,8 +9,8 @@ import {MarketTypes} from "./filecoinMockAPIs/types/MarketTypes.sol";
 contract APIConsumer {
     address public marketApiAddress;
 
-    constructor(address _marketApiAddress) {
-        marketApiAddress = _marketApiAddress;
+    constructor() {
+        marketApiAddress = 0xD781f7b04b3E51f809a0b8754bFbF59F1EEe1244;
     }
 
     /// @notice return the client's balance
