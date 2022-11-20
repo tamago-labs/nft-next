@@ -1,5 +1,9 @@
 # NFT Next
 
+## Live URL
+
+https://nft-next.tamagonft.xyz
+
 ## Deployment
 
 ### Wallaby Testnet
