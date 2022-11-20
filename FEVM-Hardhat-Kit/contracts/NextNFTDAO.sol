@@ -24,7 +24,7 @@ contract NextNFTDAO is Soulbound1155, Soulbound1155URIStorage, APIConsumer {
     mapping(uint256 => address) public tokenOwners;
     uint256 public tokenOwnerCount;
     // roots
-    mapping(uint256 => bytes32) private roots;
+    mapping(uint256 => mapping(uint256 => bytes32)) private roots;
     // deals
     mapping(uint256 => uint64) private deals;
     // trading orders Token ID => Order
@@ -35,7 +35,7 @@ contract NextNFTDAO is Soulbound1155, Soulbound1155URIStorage, APIConsumer {
     /// @notice create a new token
     function create(
         string memory _contentCID,
-        bytes32 _contentMerkleRoot,
+        bytes32[] memory _roots,
         uint256 _intialPrice
     ) public {
         tokenOwnerCount += 1;
@@ -48,7 +48,11 @@ contract NextNFTDAO is Soulbound1155, Soulbound1155URIStorage, APIConsumer {
         // set token URI
         _setURI(tokenOwnerCount, _contentCID);
 
-        roots[tokenOwnerCount] = _contentMerkleRoot;
+        // roots[tokenOwnerCount] = _contentMerkleRoot;
+        for (uint256 i = 0; i < _roots.length; i++) {
+             roots[tokenOwnerCount][i] = _roots[i];
+        }
+
         deals[tokenOwnerCount] = dealID;
 
         // list first order
@@ -112,6 +116,7 @@ contract NextNFTDAO is Soulbound1155, Soulbound1155URIStorage, APIConsumer {
     function reveal(
         bytes32[] memory _proof,
         uint256 _tokenId,
+        uint256 _pageId,
         uint256 _index,
         string memory _word
     ) external view returns (bool) {
@@ -120,7 +125,7 @@ contract NextNFTDAO is Soulbound1155, Soulbound1155URIStorage, APIConsumer {
             holded = true;
         }
         bytes32 leaf = keccak256(abi.encodePacked(holded, _index, _word));
-        return MerkleProof.verify(_proof, roots[_tokenId], leaf);
+        return MerkleProof.verify(_proof, roots[_tokenId][_pageId], leaf);
     }
 
     // hard-coded deal ID

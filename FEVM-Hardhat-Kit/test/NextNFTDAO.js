@@ -20,11 +20,9 @@ describe("NextNFTDAO", () => {
 
         [deployer, alice, bob, charlie] = await ethers.getSigners();
 
-        const MarketAPI = await ethers.getContractFactory("MarketAPI")
         const NextNFTDAO = await ethers.getContractFactory("NextNFTDAO");
 
-        const marketAPI = await MarketAPI.deploy()
-        contract = await NextNFTDAO.deploy(marketAPI.address)
+        contract = await NextNFTDAO.deploy()
 
     })
 
@@ -32,7 +30,7 @@ describe("NextNFTDAO", () => {
 
         const randomHash = Hash.of("Hello")
 
-        await contract.connect(alice).create(randomHash, ethers.utils.formatBytes32String(""), toEther(1))
+        await contract.connect(alice).create(randomHash, [ethers.utils.formatBytes32String("")], toEther(1))
 
         // should be blocked
         try {
@@ -52,7 +50,7 @@ describe("NextNFTDAO", () => {
 
         const randomHash = Hash.of("Hello")
 
-        await contract.connect(alice).create(randomHash, ethers.utils.formatBytes32String(""), toEther(1))
+        await contract.connect(alice).create(randomHash, [ethers.utils.formatBytes32String("")], toEther(1))
 
         expect(await contract.balanceOf(alice.address, 1)).to.equal(1)
 
@@ -75,7 +73,7 @@ describe("NextNFTDAO", () => {
 
         const randomHash = Hash.of("Hello")
 
-        await contract.connect(alice).create(randomHash, ethers.utils.formatBytes32String(""), toEther(1))
+        await contract.connect(alice).create(randomHash, [ethers.utils.formatBytes32String("")], toEther(1))
 
         expect(await contract.balanceOf(alice.address, 1)).to.equal(1)
 
@@ -109,7 +107,7 @@ describe("NextNFTDAO", () => {
 
         const randomHash = Hash.of("Hello")
 
-        await contract.connect(alice).create(randomHash, root, toEther(1))
+        await contract.connect(alice).create(randomHash, [root], toEther(1))
 
         const owner = await contract.tokenOwners(1)
         expect(owner).to.equal(alice.address)
@@ -119,7 +117,7 @@ describe("NextNFTDAO", () => {
         for (let x = 0; x < orignalLength; x++) {
             for (let y = 0; y < shuffled.length; y++) {
                 const proof = tree.getHexProof(ethers.utils.keccak256(ethers.utils.solidityPack(["bool", "uint256", "string"], [true, x, shuffled[y]])))
-                const output = await contract.connect(alice).reveal(proof, 1, x, shuffled[y])
+                const output = await contract.connect(alice).reveal(proof, 1, 0, x, shuffled[y])
                 if (output === true) {
                     recovered += shuffled[y]
                     break
