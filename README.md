@@ -82,7 +82,7 @@ The NFT in the project represents graphic novels, comics that may contain multip
         },
 ```
 
-Those hashes can be generated from following command
+Those hashes can be generated from following command at `FEVM-Hardhat-Kit` folder.
 
 ```
 yarn hardhat generate-leaves --sentence "MY SENTENCE TO BE SNAPSHOTED"
